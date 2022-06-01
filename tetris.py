@@ -47,12 +47,12 @@ class BlockG(Block): #게임안에서의 블록
         else : 
             self.block_size = 4
             self.block_shape = self.btype[6]
-    def drawBlock(self): ## 실질적으로 화면에 블럭을 그려넣는 메소드.
+    def drawBlock(self,position): ## 실질적으로 화면에 블럭을 그려넣는 메소드.
         cnt = 0
         row_cnt = 0
         for i in range(len(self.block_shape)):
             if self.block_shape[i] == 1:
-                pygame.draw.rect(screen,(34,56,243),(self.block_position[0]+(cnt*15),self.block_position[1]+(row_cnt*15),15,15),1)
+                pygame.draw.rect(screen,(34,56,243),(self.block_position[0]+(cnt*15)+position[0],self.block_position[1]+(row_cnt*15)+position[1],15,15),1)
                 cnt += 1
                 if cnt % self.block_size == 0:
                     row_cnt += 1
@@ -144,51 +144,59 @@ screen = pygame.display.set_mode(size)
 done= False
 clock= pygame.time.Clock()
 last_moved_time = datetime.now()
-       
-        
+block = []
+
+def blockCreat():
+    global block
+    block.append(BlockG())
+    block.append(BlockG())
+    block.append(BlockG())
+
+def blockDle():
+    del block[0]
+    block.append(BlockG()) 
+
 # 4. pygame 무한루프
 def runGame(): 
     global done
 
     screen.fill(WHITE)
     a = Board()
-    b = BlockG()
-    a.drawboard(b.block_position)
-    a.insertBlockTOBoard(b)
-    a.drawboard(b.block_position)
+    blockCreat()
+    a.drawboard(block[0].block_position)
+    pygame.display.update()  
     
-    pygame.display.update()
     while not done:
         clock.tick(500)
-        screen.fill(WHITE)
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done=True    
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:  
-                    a.delBlockToBoard(b)
-                    b.block_position[0] += 1
-                    a.insertBlockTOBoard(b)
-                    a.drawboard(b.block_position)
+                    a.delBlockToBoard(block[0])
+                    block[0].block_position[0] += 1
+                    a.insertBlockTOBoard(block[0])
+                    a.drawboard(block[0].block_position)
                     pygame.display.update() 
                 elif event.key == pygame.K_UP:
-                    a.delBlockToBoard(b)
-                    b.turnBlock()
-                    a.insertBlockTOBoard(b)
-                    a.drawboard(b.block_position)
+                    a.delBlockToBoard(block[0])
+                    block[0].turnBlock()
+                    a.insertBlockTOBoard(block[0])
+                    a.drawboard(block[0].block_position)
                     pygame.display.update() 
                 elif event.key == pygame.K_LEFT: 
-                    a.delBlockToBoard(b)
-                    b.block_position[1] -= 1  
-                    a.insertBlockTOBoard(b)   
-                    a.drawboard(b.block_position)      
+                    a.delBlockToBoard(block[0])
+                    block[0].block_position[1] -= 1  
+                    a.insertBlockTOBoard(block[0])   
+                    a.drawboard(block[0].block_position)      
                     pygame.display.update()
                 elif event.key == pygame.K_RIGHT:  
-                    a.delBlockToBoard(b)
-                    b.block_position[1] += 1
-                    a.insertBlockTOBoard(b)
-                    a.drawboard(b.block_position)
+                    a.delBlockToBoard(block[0])
+                    block[0].block_position[1] += 1
+                    a.insertBlockTOBoard(block[0])
+                    a.drawboard(block[0].block_position)
                     pygame.display.update()
 runGame()
 pygame.quit()
