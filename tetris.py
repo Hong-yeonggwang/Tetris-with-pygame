@@ -4,6 +4,8 @@ from datetime import datetime
 from datetime import timedelta
 black = (1,1,1)
 
+#테스트
+
 class Block: #블록의 필수 정보.
     block = [] ## 0번지 블럭 모양 1번지 유형 3번지 블럭 색깔
     btype= [[0,1,0,1,1,0,1,0,0],[1,1,1,0,0,1,0,0,0],[1,1,1,1,0,0,0,0,0],
@@ -29,24 +31,31 @@ class BlockG(Block): #게임안에서의 블록
         if block[0] ==  0:
             self.block_size = 3
             self.block_shape = self.btype[0]
+            self.block_position = [8,1]
         elif block[0] == 1:
             self.block_size = 3
             self.block_shape = self.btype[1]
+            self.block_position = [8,1]
         elif block[0] == 2:
             self.block_size = 3
             self.block_shape = self.btype[2]
+            self.block_position = [8,1]
         elif block[0] == 3:
             self.block_size = 3
             self.block_shape = self.btype[3]
+            self.block_position = [8,1]
         elif block[0] == 4:
             self.block_size = 3
             self.block_shape = self.btype[4]
+            self.block_position = [8,1]
         elif block[0] == 5:
             self.block_size = 2
             self.block_shape = self.btype[5]
+            self.block_position = [8,1]
         else : 
             self.block_size = 4
             self.block_shape = self.btype[6]
+            self.block_position = [8,1]
     def drawBlock(self,position): ## 실질적으로 화면에 블럭을 그려넣는 메소드.
         cnt = 0
         row_cnt = 0
@@ -105,7 +114,7 @@ class Board:
         row_cnt = 0
         for i in range(len(block.block_shape)):
             if block.block_shape[i] == 1:
-                self.board[row_cnt+block.block_position[0]+1][col_cnt+block.block_position[1]] = [1,1]
+                self.board[row_cnt+block.block_position[1]][col_cnt+block.block_position[0]] = [1,1]
                 col_cnt += 1
                 if col_cnt % block.block_size == 0:
                     row_cnt += 1
@@ -121,7 +130,7 @@ class Board:
         row_cnt = 0
         for i in range(len(block.block_shape)):
             if block.block_shape[i] == 1:
-                self.board[row_cnt+block.block_position[0]+1][col_cnt+block.block_position[1]] = [0,0]
+                self.board[row_cnt+block.block_position[1]][col_cnt+block.block_position[0]] = [0,0]
                 col_cnt += 1
                 if col_cnt % block.block_size == 0:
                     row_cnt += 1
@@ -152,18 +161,22 @@ def blockCreat():
     block.append(BlockG())
     block.append(BlockG())
 
-def blockDle():
+def blockDel():
     del block[0]
-    block.append(BlockG()) 
+    block.append(BlockG())
+
+def checkBlcok(self,block,board):
+    pass 
 
 # 4. pygame 무한루프
 def runGame(): 
     global done
 
     screen.fill(WHITE)
-    a = Board()
+    board = Board()
     blockCreat()
-    a.drawboard(block[0].block_position)
+    board.insertBlockTOBoard(block[0])
+    board.drawboard(block[0].block_position)
     pygame.display.update()  
     
     while not done:
@@ -175,28 +188,29 @@ def runGame():
                 done=True    
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:  
-                    a.delBlockToBoard(block[0])
-                    block[0].block_position[0] += 1
-                    a.insertBlockTOBoard(block[0])
-                    a.drawboard(block[0].block_position)
+                    board.delBlockToBoard(block[0])
+                    block[0].block_position[1] += 1
+                    board.insertBlockTOBoard(block[0])
+                    board.drawboard(block[0].block_position)
+                    print(block[0].block_position)
                     pygame.display.update() 
                 elif event.key == pygame.K_UP:
-                    a.delBlockToBoard(block[0])
+                    board.delBlockToBoard(block[0])
                     block[0].turnBlock()
-                    a.insertBlockTOBoard(block[0])
-                    a.drawboard(block[0].block_position)
+                    board.insertBlockTOBoard(block[0])
+                    board.drawboard(block[0].block_position)
                     pygame.display.update() 
                 elif event.key == pygame.K_LEFT: 
-                    a.delBlockToBoard(block[0])
-                    block[0].block_position[1] -= 1  
-                    a.insertBlockTOBoard(block[0])   
-                    a.drawboard(block[0].block_position)      
+                    board.delBlockToBoard(block[0])
+                    block[0].block_position[0] -= 1  
+                    board.insertBlockTOBoard(block[0])   
+                    board.drawboard(block[0].block_position)      
                     pygame.display.update()
                 elif event.key == pygame.K_RIGHT:  
-                    a.delBlockToBoard(block[0])
-                    block[0].block_position[1] += 1
-                    a.insertBlockTOBoard(block[0])
-                    a.drawboard(block[0].block_position)
+                    board.delBlockToBoard(block[0])
+                    block[0].block_position[0] += 1
+                    board.insertBlockTOBoard(block[0])
+                    board.drawboard(block[0].block_position)
                     pygame.display.update()
 runGame()
 pygame.quit()
