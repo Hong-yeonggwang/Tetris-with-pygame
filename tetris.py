@@ -75,19 +75,21 @@ class BlockG(Block): #게임안에서의 블록
         block[1] += 10
         block[0] += 50
     def turnBlock(self):
-        tmp = [] 
-        tmp.append(self.block_shape[1])
-        tmp.append(self.block_shape[2]) 
-        tmp.append(self.block_shape[5])
+        if self.block_size == 3:    
+            tmp = [] 
+            tmp.append(self.block_shape[1])
+            tmp.append(self.block_shape[2]) 
+            tmp.append(self.block_shape[5])
 
-        self.block_shape[1] = self.block_shape[3]
-        self.block_shape[2] = self.block_shape[6]
-        self.block_shape[5] = self.block_shape[7]
-        
-        self.block_shape[3] = tmp[0]
-        self.block_shape[6] = tmp[1]
-        self.block_shape[7] = tmp[2]
-
+            self.block_shape[1] = self.block_shape[3]
+            self.block_shape[2] = self.block_shape[6]
+            self.block_shape[5] = self.block_shape[7]
+            
+            self.block_shape[3] = tmp[0]
+            self.block_shape[6] = tmp[1]
+            self.block_shape[7] = tmp[2]
+        elif self.block_size == 2:
+            return
 
 class Board:
     board = []
@@ -217,7 +219,9 @@ def runGame():
                 elif event.key == pygame.K_UP:
                     board.delBlockToBoard(block[0])
                     block[0].turnBlock()
-                    board.insertBlockTOBoard(block[0])
+                    if board.insertBlockTOBoard(block[0]) == True:
+                        block[0].turnBlock()
+                        board.insertBlockTOBoard(block[0])
                     board.drawboard(block[0].block_position)
                     pygame.display.update() 
                 elif event.key == pygame.K_LEFT: 
