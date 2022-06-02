@@ -109,14 +109,27 @@ class Board:
                         pygame.draw.rect(screen,(255,0,0),(108+15*j,15*i,15,15),4)
                     elif self.board[i][j][1] == 1:
                         pygame.draw.rect(screen,(0,0,255),(108+15*j,15*i,15,15),4)
-    def insertBlockTOBoard(self,block):
+    def insertBlockTOBoard(self,block):  
         col_cnt = 0
         row_cnt = 0
-        for i in range(block.block_size):
-            for j in range(block.block_size):
-                if self.board[i+block.block_position[1]][j+block.block_position[0]][0] == 1:
-                    return True             
         for i in range(len(block.block_shape)):
+            if block.block_shape[i] == 1:
+                if self.board[row_cnt+block.block_position[1]][col_cnt+block.block_position[0]][0] == 0 :
+                    col_cnt += 1
+                    if col_cnt % block.block_size == 0:
+                        row_cnt += 1
+                        col_cnt = 0
+                else : 
+                    return True
+            else:
+                col_cnt += 1
+                if col_cnt % block.block_size == 0:
+                    row_cnt += 1
+                    col_cnt = 0
+        col_cnt = 0
+        row_cnt = 0
+        for i in range(len(block.block_shape)):
+            
             if block.block_shape[i] == 1:
                 self.board[row_cnt+block.block_position[1]][col_cnt+block.block_position[0]] = [1,1]
                 col_cnt += 1
