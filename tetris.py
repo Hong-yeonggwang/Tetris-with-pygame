@@ -159,8 +159,7 @@ class Board:
                 if col_cnt % block.block_size == 0:
                     row_cnt += 1
                     col_cnt = 0
-
-                
+   
 
 pygame.init() # 2. pygame 초기화
 
@@ -185,8 +184,15 @@ def blockDel():
     del block[0]
     block.append(BlockG())
 
-def checkBlcok(self,block,board):
-    pass 
+def checkBlock(board):
+    for i in range(1,len(board.board)):
+            check = 0
+            for j in range(1,len(board.board[i])):
+                if board.board[i][j][0] == 1:
+                    check += 1
+                elif check == 17:
+                    del board.board[i]
+                    board.board.insert(1,[[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]]) 
 
 # 4. pygame 무한루프
 def runGame(): 
@@ -209,6 +215,7 @@ def runGame():
             if board.insertBlockTOBoard(block[0]) == True:
                 block[0].block_position[1] -= 1
                 board.insertBlockTOBoard(block[0])
+                checkBlock(board)
                 blockDel()
             board.drawboard(block[0].block_position)
             print(block[0].block_position)
@@ -226,6 +233,7 @@ def runGame():
                     if board.insertBlockTOBoard(block[0]) == True:
                         block[0].block_position[1] -= 1
                         board.insertBlockTOBoard(block[0])
+                        checkBlock(board)
                         blockDel()
                     board.drawboard(block[0].block_position)
                     print(block[0].block_position)
@@ -254,18 +262,7 @@ def runGame():
                         board.insertBlockTOBoard(block[0])
                     board.drawboard(block[0].block_position)
                     pygame.display.update()
-        
-        for i in range(1,len(board.board)):
-            check = 0
-            for j in range(1,len(board.board[i])):
-                if board.board[i][j][0] == 1:
-                    check += 1
-                elif check == 17:
-                    del board.board[i]
-                    board.board.insert(1,[[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]])
-
-
-                    
+        # checkBlock(board)
 
 
 runGame()
