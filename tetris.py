@@ -254,10 +254,17 @@ def runGame():
                         board.insertBlockTOBoard(block[0])
                     board.drawboard(block[0].block_position)
                     pygame.display.update()
+        
+        for i in range(1,len(board.board)):
+            check = 0
+            for j in range(1,len(board.board[i])):
+                if board.board[i][j][0] == 1:
+                    check += 1
+                elif check == 17:
+                    del board.board[i]
+                    board.board.insert(1,[[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]])
 
-        # for i in range(len(board.board)):
-        #     for j in range(len(board.board[i])):
-        #         if board.board[i][j][0] == 1:
+
                     
 
 
