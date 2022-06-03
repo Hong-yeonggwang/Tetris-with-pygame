@@ -97,9 +97,9 @@ class Board:
     def __init__(self):
         for i in range(25):
             if i == 0 or i == 24:
-                Board.board.append([[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0],[1,0]]) #19개 원소
+                Board.board.append([[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0]]) #19개 원소
             else : 
-                Board.board.append([[1,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[1,0]])
+                Board.board.append([[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]])
     def drawboard(self,position):
         for i in range(len(self.board)):
             for j in range(len(self.board[i])):
@@ -171,6 +171,7 @@ size = [500,500]
 screen = pygame.display.set_mode(size)
 done= False
 clock= pygame.time.Clock()
+Move_INTERVAL = timedelta(seconds=0.5)
 last_moved_time = datetime.now()
 block = []
 
@@ -189,17 +190,30 @@ def checkBlcok(self,block,board):
 
 # 4. pygame 무한루프
 def runGame(): 
-    global done
+    global done,Move_INTERVAL,last_moved_time
 
     screen.fill(WHITE)
     board = Board()
     blockCreat()
-    board.insertBlockTOBoard(block[0])
-    board.drawboard(block[0].block_position)
-    pygame.display.update()  
+ 
     
     while not done:
         clock.tick(500)
+        board.insertBlockTOBoard(block[0])
+        board.drawboard(block[0].block_position)
+        pygame.display.update() 
+
+        if Move_INTERVAL < datetime.now() - last_moved_time:
+            board.delBlockToBoard(block[0])
+            block[0].block_position[1] += 1
+            if board.insertBlockTOBoard(block[0]) == True:
+                block[0].block_position[1] -= 1
+                board.insertBlockTOBoard(block[0])
+                blockDel()
+            board.drawboard(block[0].block_position)
+            print(block[0].block_position)
+            pygame.display.update() 
+            last_moved_time = datetime.now()
 
 
         for event in pygame.event.get():
@@ -240,5 +254,12 @@ def runGame():
                         board.insertBlockTOBoard(block[0])
                     board.drawboard(block[0].block_position)
                     pygame.display.update()
+
+        # for i in range(len(board.board)):
+        #     for j in range(len(board.board[i])):
+        #         if board.board[i][j][0] == 1:
+                    
+
+
 runGame()
 pygame.quit()
