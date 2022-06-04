@@ -108,7 +108,9 @@ class Board:
                 Board.board.append([[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0]]) #19개 원소
             else : 
                 Board.board.append([[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]])
-    def drawboard(self,block):
+    def __del__(self):
+        Board.board = []
+    def drawboard(self):
         for i in range(len(self.board)):
             for j in range(len(self.board[i])):
                 if self.board[i][j][0] == 0:
@@ -169,14 +171,14 @@ class Board:
                     col_cnt = 0
    
 
-pygame.init() # 2. pygame 초기화
+# pygame.init() # 2. pygame 초기화
 
 # 3. pygame에 사용되는 전역변수 선언
 WHITE = (255,255,255)
 color = [[255,0,0],[255,50,0],[255,255,0],[0,0,255],[0,255,0],[100,0,255],[255,255,255]] #빨주노초파남보 컬러코드
 size = [500,500]
-screen = pygame.display.set_mode(size)
-done= False
+# screen = pygame.display.set_mode(size)
+# done= False
 clock= pygame.time.Clock()
 Move_INTERVAL = timedelta(seconds=0.5)
 last_moved_time = datetime.now()
@@ -200,11 +202,19 @@ def checkBlock(board):
                     check += 1
                 elif check == 17:
                     del board.board[i]
-                    board.board.insert([[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]]) 
+                    board.board.insert(1,[[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]]) 
 
+def setscreen():
+    pygame.init()
+    global screen 
+    screen = pygame.display.set_mode(size)
+    
+    
 # 4. pygame 무한루프
 def runGame(): 
     global done,Move_INTERVAL,last_moved_time
+
+    done= False
 
     screen.fill(WHITE)
     board = Board()
@@ -214,7 +224,7 @@ def runGame():
     while not done:
         clock.tick(500)
         board.insertBlockTOBoard(block[0])
-        board.drawboard(block[0])
+        board.drawboard()
         pygame.display.update() 
 
         if Move_INTERVAL < datetime.now() - last_moved_time:
@@ -225,7 +235,7 @@ def runGame():
                 board.insertBlockTOBoard(block[0])
                 checkBlock(board)
                 blockDel()
-            board.drawboard(block[0])
+            board.drawboard()
             print(block[0].block_position)
             pygame.display.update() 
             last_moved_time = datetime.now()
@@ -233,7 +243,8 @@ def runGame():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                done=True    
+                del board
+                done=True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
                     board.delBlockToBoard(block[0])
@@ -243,7 +254,7 @@ def runGame():
                         board.insertBlockTOBoard(block[0])
                         checkBlock(board)
                         blockDel()
-                    board.drawboard(block[0])
+                    board.drawboard()
                     print(block[0].block_position)
                     pygame.display.update() 
                 elif event.key == pygame.K_UP:
@@ -252,7 +263,7 @@ def runGame():
                     if board.insertBlockTOBoard(block[0]) == True:
                         block[0].turnBlock()
                         board.insertBlockTOBoard(block[0])
-                    board.drawboard(block[0])
+                    board.drawboard()
                     pygame.display.update() 
                 elif event.key == pygame.K_LEFT: 
                     board.delBlockToBoard(block[0])
@@ -260,7 +271,7 @@ def runGame():
                     if board.insertBlockTOBoard(block[0]) == True:
                         block[0].block_position[0] += 1
                         board.insertBlockTOBoard(block[0])  
-                    board.drawboard(block[0])      
+                    board.drawboard()      
                     pygame.display.update()
                 elif event.key == pygame.K_RIGHT:  
                     board.delBlockToBoard(block[0])
@@ -268,10 +279,10 @@ def runGame():
                     if board.insertBlockTOBoard(block[0]) == True:
                         block[0].block_position[0] -= 1
                         board.insertBlockTOBoard(block[0])
-                    board.drawboard(block[0])
+                    board.drawboard()
                     pygame.display.update()
 
 
-
-runGame()
-pygame.quit()
+# setscreen()
+# runGame()
+# pygame.quit()
