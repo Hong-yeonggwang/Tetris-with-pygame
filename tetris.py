@@ -69,7 +69,7 @@ class BlockG(Block): #게임안에서의 블록
         row_cnt = 0
         for i in range(len(self.block_shape)):
             if self.block_shape[i] == 1:
-                pygame.draw.rect(screen,(34,56,243),(self.block_position[0]+(cnt*15)+position[0],self.block_position[1]+(row_cnt*15)+position[1],15,15),1)
+                pygame.draw.rect(screen,color[self.block_color],(self.block_position[0]+(cnt*15)+position[0],self.block_position[1]+(row_cnt*15)+position[1],15,15),4)
                 cnt += 1
                 if cnt % self.block_size == 0:
                     row_cnt += 1
@@ -116,11 +116,10 @@ class Board:
                 if self.board[i][j][0] == 0:
                     pygame.draw.rect(screen,(128,128,128),(108+15*j,15*i,15,15),4)
 
+                elif self.board[i][j][0] == 2:
+                    pygame.draw.rect(screen,(0,0,0),(108+15*j,15*i,15,15),4)
                 else:
-                    if self.board[i][j][1] == 0:
-                        pygame.draw.rect(screen,(0,0,0),(108+15*j,15*i,15,15),4)
-                    else:
-                        pygame.draw.rect(screen,color[self.board[i][j][1]],(108+15*j,15*i,15,15),4)
+                    pygame.draw.rect(screen,color[self.board[i][j][1]],(108+15*j,15*i,15,15),4)
     def insertBlockTOBoard(self,block):  
         col_cnt = 0
         row_cnt = 0
@@ -175,7 +174,7 @@ class Board:
 
 # 3. pygame에 사용되는 전역변수 선언
 WHITE = (255,255,255)
-color = [[255,0,0],[255,50,0],[255,255,0],[0,0,255],[0,255,0],[100,0,255],[255,255,255]] #빨주노초파남보 컬러코드
+color = [[255,0,0],[255,50,0],[255,255,0],[0,0,255],[0,255,0],[100,0,255],[255,192,203]] #빨주노초파남보 컬러코드
 size = [500,500]
 # screen = pygame.display.set_mode(size)
 # done= False
@@ -208,7 +207,11 @@ def setscreen():
     pygame.init()
     global screen 
     screen = pygame.display.set_mode(size)
-    
+def drawNextBlock():
+    global block
+    block[1].drawBlock([400,20])
+    block[2].drawBlock([400,80])
+
     
 # 4. pygame 무한루프
 def runGame(): 
@@ -216,15 +219,17 @@ def runGame():
 
     done= False
 
-    screen.fill(WHITE)
+    # screen.fill(WHITE)
     board = Board()
     blockCreat()
  
     
     while not done:
+        screen.fill(WHITE)
         clock.tick(500)
         board.insertBlockTOBoard(block[0])
         board.drawboard()
+        drawNextBlock()
         pygame.display.update() 
 
         if Move_INTERVAL < datetime.now() - last_moved_time:
@@ -283,6 +288,6 @@ def runGame():
                     pygame.display.update()
 
 
-# setscreen()
-# runGame()
-# pygame.quit()
+setscreen()
+runGame()
+pygame.quit()
