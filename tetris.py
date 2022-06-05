@@ -224,10 +224,13 @@ def drawSaveBlock():
         save[0].drawBlock([15,15])
 
 def saveBlock(board):
-    save.append(block[0])
-    board.delBlockToBoard(block[0])
-    block[0].block_position = [8,1]
-    blockDel()
+    if len(save) == 0:
+        save.append(block[0])
+        board.delBlockToBoard(block[0])
+        block[0].block_position = [8,1]
+        blockDel()
+    else:
+        pass
 
 def pullBlock(board):
     if len(save) == 0:
