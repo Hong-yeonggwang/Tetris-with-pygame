@@ -1,3 +1,4 @@
+from pickle import NONE
 import pygame
 import random
 from datetime import datetime
@@ -5,11 +6,11 @@ from datetime import timedelta
 
 #테스트
 
-class Block: #블록의 필수 정보.
+class Block: #블록의 필수 정보. 블럭을 랜덤으로 생성한다.
     block = [] ## 0번지 블럭 모양 1번지 색깔
     btype= [[0,1,0,1,1,0,1,0,0],[1,1,1,0,0,1,0,0,0],[1,1,1,1,0,0,0,0,0],
     [0,1,0,1,1,1,0,0,0],[0,0,0,1,1,1,0,1,0],[1,1,1,1],[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0]]
-    block_num = 0
+    # block_num = 0
     def makeBlock(self):  ##랜덤으로 블록을 만듦
         shape = random.randint(0,6)      
         color = random.randint(0,5)
@@ -69,7 +70,7 @@ class BlockG(Block): #게임안에서의 블록
         row_cnt = 0
         for i in range(len(self.block_shape)):
             if self.block_shape[i] == 1:
-                pygame.draw.rect(screen,color[self.block_color],(self.block_position[0]+(cnt*15)+position[0],self.block_position[1]+(row_cnt*15)+position[1],15,15),4)
+                pygame.draw.rect(screen,color[self.block_color],((cnt*15)+position[0],(row_cnt*15)+position[1],15,15),4)
                 cnt += 1
                 if cnt % self.block_size == 0:
                     row_cnt += 1
@@ -98,6 +99,9 @@ class BlockG(Block): #게임안에서의 블록
             self.block_shape[7] = tmp[2]
         elif self.block_size == 2:
             return
+
+
+
 
 class Board:
     board = []
@@ -182,9 +186,10 @@ clock= pygame.time.Clock()
 Move_INTERVAL = timedelta(seconds=0.5)
 last_moved_time = datetime.now()
 block = []
+save = []
 
 def blockCreat():
-    global block
+    # global block
     block.append(BlockG())
     block.append(BlockG())
     block.append(BlockG())
@@ -212,6 +217,28 @@ def drawNextBlock():
     block[1].drawBlock([400,20])
     block[2].drawBlock([400,80])
 
+def drawSaveBlock():
+    if len(save) == 0:
+        pass
+    else:
+        save[0].drawBlock([15,15])
+
+def saveBlock(board):
+    save.append(block[0])
+    board.delBlockToBoard(block[0])
+    block[0].block_position = [8,1]
+    blockDel()
+
+def pullBlock(board):
+    if len(save) == 0:
+        pass
+    else:
+        board.delBlockToBoard(block[0])
+        block[0].block_position = [8,1]
+        block.insert(0,save[0])
+        del save[0]
+
+
     
 # 4. pygame 무한루프
 def runGame(): 
@@ -230,6 +257,7 @@ def runGame():
         board.insertBlockTOBoard(block[0])
         board.drawboard()
         drawNextBlock()
+        drawSaveBlock()
         pygame.display.update() 
 
         if Move_INTERVAL < datetime.now() - last_moved_time:
@@ -285,6 +313,13 @@ def runGame():
                         block[0].block_position[0] -= 1
                         board.insertBlockTOBoard(block[0])
                     board.drawboard()
+                    pygame.display.update()
+                elif event.key == pygame.K_s:
+                    saveBlock(board)
+                    drawSaveBlock()
+                    pygame.display.update()
+                elif event.key == pygame.K_d:
+                    pullBlock(board)
                     pygame.display.update()
 
 
