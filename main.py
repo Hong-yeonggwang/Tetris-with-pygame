@@ -20,10 +20,7 @@ idBox.place( x = 70, y = 10)
 pwdBox = t.Entry(root)
 pwdBox.place(x = 70,  y = 35)
  
-enter = t.Button(root, text="OK" , command= click)
+enter = t.Button(root, text="ENTER" , command= click)
 enter.place( x = 220 , y = 23)
 
-
-
- 
 root.mainloop()
