@@ -1,8 +1,3 @@
-from operator import truediv
-from pickle import NONE
-from re import T
-from tkinter.tix import Tree
-import turtle
 import pygame
 import random
 from datetime import datetime
@@ -181,7 +176,6 @@ class Board:
 # pygame.init() # 2. pygame 초기화
 
 # 3. pygame에 사용되는 전역변수 선언
-WHITE = (255,255,255)
 color = [[255,0,0],[255,50,0],[255,255,0],[0,0,255],[0,255,0],[100,0,255],[255,192,203]] #빨주노초파남보 컬러코드
 size = [500,500]
 # screen = pygame.display.set_mode(size)
@@ -192,6 +186,7 @@ last_moved_time = datetime.now()
 block = []
 save = []
 score = 0
+stop = False
 
 def blockCreat():
     # global block
@@ -269,7 +264,7 @@ def pullBlock(board):
         block.insert(0,save[0])
         del save[0]
 def drawbackground():
-    screen.fill(WHITE)
+    screen.fill((255,255,255))
     pygame.draw.rect(screen,(0,0,0),(20,100,90,90),4)
     pygame.draw.rect(screen,(0,0,0),(390,40,90,90),4)
     pygame.draw.rect(screen,(0,0,0),(390,150,90,90),4)
@@ -281,7 +276,7 @@ def drawbackground():
     
 # 4. pygame 무한루프
 def runGame(): 
-    global done,Move_INTERVAL,last_moved_time
+    global done,Move_INTERVAL,last_moved_time,stop,block
     done= False
 
     board = Board()
@@ -314,6 +309,9 @@ def runGame():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 del board
+                block = []
+                if len(save) == 1:
+                    del save[0]
                 done=True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
@@ -358,8 +356,15 @@ def runGame():
                 elif event.key == pygame.K_d:
                     pullBlock(board)
                     pygame.display.update()
+                elif event.key == pygame.K_ESCAPE:
+                    stop = True
+                    if stop == True:
+                        import pause
+                        pause.setDisplay()
+                        
 
 
-setscreen()
-runGame()
-pygame.quit()
+
+# setscreen()
+# runGame()
+# pygame.quit()
