@@ -33,44 +33,44 @@ class BlockG(Block): #게임안에서의 블록
         if block[0] ==  0:
             self.block_size = 3
             self.block_shape = self.btype[0]
-            self.block_position = [8,1]
+            self.block_position = [5,1]
             self.block_color = block[0]
         elif block[0] == 1:
             self.block_size = 3
             self.block_shape = self.btype[1]
-            self.block_position = [8,1]
+            self.block_position = [5,1]
             self.block_color = block[0]
         elif block[0] == 2:
             self.block_size = 3
             self.block_shape = self.btype[2]
-            self.block_position = [8,1]
+            self.block_position = [5,1]
             self.block_color = block[0]
         elif block[0] == 3:
             self.block_size = 3
             self.block_shape = self.btype[3]
-            self.block_position = [8,1]
+            self.block_position = [5,1]
             self.block_color = block[0]
         elif block[0] == 4:
             self.block_size = 3
             self.block_shape = self.btype[4]
-            self.block_position = [8,1]
+            self.block_position = [5,1]
             self.block_color = block[0]
         elif block[0] == 5:
             self.block_size = 2
             self.block_shape = self.btype[5]
-            self.block_position = [8,1]
+            self.block_position = [5,1]
             self.block_color = block[0]
         else : 
             self.block_size = 4
             self.block_shape = self.btype[6]
-            self.block_position = [8,1]
+            self.block_position = [5,1]
             self.block_color = block[0]
     def drawBlock(self,position): ## 실질적으로 화면에 블럭을 그려넣는 메소드.
         cnt = 0
         row_cnt = 0
         for i in range(len(self.block_shape)):
             if self.block_shape[i] == 1:
-                pygame.draw.rect(screen,color[self.block_color],((cnt*15)+position[0],(row_cnt*15)+position[1],15,15),4)
+                pygame.draw.rect(screen,color[self.block_color],((cnt*20)+position[0],(row_cnt*20)+position[1],20,20),4)
                 cnt += 1
                 if cnt % self.block_size == 0:
                     row_cnt += 1
@@ -107,23 +107,23 @@ class Board:
     board = []
 
     def __init__(self):
-        for i in range(25):
-            if i == 0 or i == 24:
-                Board.board.append([[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0]]) #19개 원소
+        for i in range(22):
+            if i == 0 or i == 21:
+                Board.board.append([[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0],[2,0]]) #19개 원소
             else : 
-                Board.board.append([[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]])
+                Board.board.append([[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]])
     def __del__(self):
         Board.board = []
     def drawboard(self):
         for i in range(len(self.board)):
             for j in range(len(self.board[i])):
                 if self.board[i][j][0] == 0:
-                    pygame.draw.rect(screen,(128,128,128),(108+15*j,15*i,15,15),4)
+                    pygame.draw.rect(screen,(128,128,128),(130+20*j,20*i,20,20),4)
 
                 elif self.board[i][j][0] == 2:
-                    pygame.draw.rect(screen,(0,0,0),(108+15*j,15*i,15,15),4)
+                    pygame.draw.rect(screen,(0,0,0),(130+20*j,20*i,20,20),4)
                 else:
-                    pygame.draw.rect(screen,color[self.board[i][j][1]],(108+15*j,15*i,15,15),4)
+                    pygame.draw.rect(screen,color[self.board[i][j][1]],(130+20*j,20*i,20,20),4)
     def insertBlockTOBoard(self,block):  
         col_cnt = 0
         row_cnt = 0
@@ -204,30 +204,52 @@ def checkBlock(board):
             for j in range(1,len(board.board[i])):
                 if board.board[i][j][0] == 1:
                     check += 1
-                elif check == 17:
+                elif check == 10:
                     del board.board[i]
-                    board.board.insert(1,[[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]]) 
+                    board.board.insert(1,[[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]]) 
+def checkGameOver(block):
+    global done
+    if block.block_position[1] == 1:
+        done = True
+        # return T
+        # rue
 
 def setscreen():
     pygame.init()
     global screen 
     screen = pygame.display.set_mode(size)
 def drawNextBlock():
-    global block
-    block[1].drawBlock([400,20])
-    block[2].drawBlock([400,80])
+    if block[1].block_size == 3:
+        block[1].drawBlock([405,55])
+    elif block[1].block_size == 2:
+        block[1].drawBlock([415,65])
+    else:
+        block[1].drawBlock([425,45])
+
+    if block[2].block_size == 3:
+        block[2].drawBlock([405,165])
+    elif block[2].block_size == 2:
+        block[2].drawBlock([415,175])
+    else:
+        block[2].drawBlock([425,155])
+
 
 def drawSaveBlock():
     if len(save) == 0:
         pass
     else:
-        save[0].drawBlock([15,15])
+        if save[0].block_size == 3:
+            save[0].drawBlock([35,115])
+        elif save[0].block_size == 2:
+            save[0].drawBlock([45,125])
+        else:
+            save[0].drawBlock([55,105])
 
 def saveBlock(board):
     if len(save) == 0:
         save.append(block[0])
         board.delBlockToBoard(block[0])
-        block[0].block_position = [8,1]
+        block[0].block_position = [5,1]
         blockDel()
     else:
         pass
@@ -237,30 +259,32 @@ def pullBlock(board):
         pass
     else:
         board.delBlockToBoard(block[0])
-        block[0].block_position = [8,1]
+        block[0].block_position = [5,1]
         block.insert(0,save[0])
         del save[0]
+def drawbackground():
+    screen.fill(WHITE)
+    pygame.draw.rect(screen,(0,0,0),(20,100,90,90),4)
+    pygame.draw.rect(screen,(0,0,0),(390,40,90,90),4)
+    pygame.draw.rect(screen,(0,0,0),(390,150,90,90),4)
 
 
     
 # 4. pygame 무한루프
 def runGame(): 
     global done,Move_INTERVAL,last_moved_time
-
     done= False
 
-    # screen.fill(WHITE)
     board = Board()
     blockCreat()
- 
-    
+
     while not done:
-        screen.fill(WHITE)
+        drawbackground()
         clock.tick(500)
         board.insertBlockTOBoard(block[0])
         board.drawboard()
         drawNextBlock()
-        drawSaveBlock()
+        drawSaveBlock() 
         pygame.display.update() 
 
         if Move_INTERVAL < datetime.now() - last_moved_time:
@@ -270,6 +294,7 @@ def runGame():
                 block[0].block_position[1] -= 1
                 board.insertBlockTOBoard(block[0])
                 checkBlock(board)
+                checkGameOver(block[0])
                 blockDel()
             board.drawboard()
             print(block[0].block_position)
