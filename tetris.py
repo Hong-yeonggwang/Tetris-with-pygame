@@ -1,4 +1,8 @@
+from operator import truediv
 from pickle import NONE
+from re import T
+from tkinter.tix import Tree
+import turtle
 import pygame
 import random
 from datetime import datetime
@@ -187,6 +191,7 @@ Move_INTERVAL = timedelta(seconds=0.5)
 last_moved_time = datetime.now()
 block = []
 save = []
+score = 0
 
 def blockCreat():
     # global block
@@ -199,6 +204,7 @@ def blockDel():
     block.append(BlockG())
 
 def checkBlock(board):
+    global score
     for i in range(1,len(board.board)):
             check = 0
             for j in range(1,len(board.board[i])):
@@ -207,12 +213,12 @@ def checkBlock(board):
                 elif check == 10:
                     del board.board[i]
                     board.board.insert(1,[[2,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[2,0]]) 
+                    score += 100
 def checkGameOver(block):
     global done
     if block.block_position[1] == 1:
         done = True
         # return T
-        # rue
 
 def setscreen():
     pygame.init()
@@ -267,6 +273,9 @@ def drawbackground():
     pygame.draw.rect(screen,(0,0,0),(20,100,90,90),4)
     pygame.draw.rect(screen,(0,0,0),(390,40,90,90),4)
     pygame.draw.rect(screen,(0,0,0),(390,150,90,90),4)
+    font = pygame.font.SysFont("arial",30,True,True)
+    text = font.render(str(score),True,(0,0,0))
+    screen.blit(text,(10,10))
 
 
     
