@@ -2,13 +2,11 @@ import tkinter as t
 import tetris
 
 def click():
-    root.destroy()
     tetris.setscreen()
     tetris.runGame()
     tetris.pygame.quit()
-    runDisplay()   
 
-def runDisplay():
+def loginDisplay():
     global root
     root = t.Tk()
     root.geometry('500x500')
@@ -27,7 +25,7 @@ def runDisplay():
     enter = t.Button(root, text="ENTER" , command= click)
     enter.place( x = 220 , y = 23)
     root.mainloop()
-    if tetris.done == True:
-        root.quit()
+    # if tetris.done == True:
+    #     root.quit()
 
-runDisplay()
+loginDisplay()

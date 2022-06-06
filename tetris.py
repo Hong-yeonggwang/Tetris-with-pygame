@@ -176,21 +176,20 @@ class Board:
 # pygame.init() # 2. pygame 초기화
 
 # 3. pygame에 사용되는 전역변수 선언
-color = [[255,0,0],[255,50,0],[255,255,0],[0,0,255],[0,255,0],[100,0,255],[255,192,203]] #빨주노초파남보 컬러코드
-size = [500,500]
-# screen = pygame.display.set_mode(size)
-# done= False
-clock= pygame.time.Clock()
-Move_INTERVAL = timedelta(seconds=0.5)
-last_moved_time = datetime.now()
-block = []
-save = []
-score = 0
-stop = False
-gOver = True
+# color = [[255,0,0],[255,50,0],[255,255,0],[0,0,255],[0,255,0],[100,0,255],[255,192,203]] #빨주노초파남보 컬러코드
+# size = [500,500]
+# # screen = pygame.display.set_mode(size)
+# # done= False
+# clock= pygame.time.Clock()
+# Move_INTERVAL = timedelta(seconds=0.5)
+# last_moved_time = datetime.now()
+# block = []
+# save = []
+# score = 0
+# stop = False
+# gOver = True
 
 def blockCreat():
-    # global block
     block.append(BlockG())
     block.append(BlockG())
     block.append(BlockG())
@@ -214,11 +213,11 @@ def checkGameOver(block):
     global done
     if block.block_position[1] == 1:
         done = True
-        # return T
 
 def setscreen():
     pygame.init()
-    global screen 
+    global screen,size
+    size = [500,500]
     screen = pygame.display.set_mode(size)
 def drawNextBlock():
     if block[1].block_size == 3:
@@ -236,7 +235,7 @@ def drawNextBlock():
         block[2].drawBlock([425,155])
 
 
-def drawSaveBlock():
+def drawSaveBlock(save):
     if len(save) == 0:
         pass
     else:
@@ -247,7 +246,7 @@ def drawSaveBlock():
         else:
             save[0].drawBlock([55,105])
 
-def saveBlock(board):
+def saveBlock(board,save):
     if len(save) == 0:
         save.append(block[0])
         board.delBlockToBoard(block[0])
@@ -256,7 +255,7 @@ def saveBlock(board):
     else:
         pass
 
-def pullBlock(board):
+def pullBlock(board,save):
     if len(save) == 0:
         pass
     else:
@@ -284,8 +283,18 @@ def gameover():
     
 # 4. pygame 무한루프
 def runGame(): 
-    global done,Move_INTERVAL,last_moved_time,stop,block,gOver
+    global done,Move_INTERVAL,last_moved_time,stop,block,gOver,color,size,score
     done= False
+    color = [[255,0,0],[255,50,0],[255,255,0],[0,0,255],[0,255,0],[100,0,255],[255,192,203]] #빨주노초파남보 컬러코드
+    
+    clock= pygame.time.Clock()
+    Move_INTERVAL = timedelta(seconds=0.5)
+    last_moved_time = datetime.now()
+    block = []
+    save = []
+    score = 0
+    stop = False
+    gOver = True
 
     board = Board()
     blockCreat()
@@ -296,7 +305,7 @@ def runGame():
         board.insertBlockTOBoard(block[0])
         board.drawboard()
         drawNextBlock()
-        drawSaveBlock() 
+        drawSaveBlock(save) 
         pygame.display.update() 
 
         if Move_INTERVAL < datetime.now() - last_moved_time:
@@ -358,11 +367,11 @@ def runGame():
                     board.drawboard()
                     pygame.display.update()
                 elif event.key == pygame.K_s:
-                    saveBlock(board)
-                    drawSaveBlock()
+                    saveBlock(board,save)
+                    drawSaveBlock(save)
                     pygame.display.update()
                 elif event.key == pygame.K_d:
-                    pullBlock(board)
+                    pullBlock(board,save)
                     pygame.display.update()
                 elif event.key == pygame.K_ESCAPE:
                     stop = True
