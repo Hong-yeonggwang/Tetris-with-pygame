@@ -187,6 +187,7 @@ block = []
 save = []
 score = 0
 stop = False
+gOver = True
 
 def blockCreat():
     # global block
@@ -272,11 +273,18 @@ def drawbackground():
     text = font.render(str(score),True,(0,0,0))
     screen.blit(text,(10,10))
 
+def gameover():
+    font = pygame.font.SysFont("arial",70,True,True)
+    text = font.render("GAME OVER",True,(10,10,10))
+    screen.blit(text,(60,200))
+    pygame.display.update()
+    
+
 
     
 # 4. pygame 무한루프
 def runGame(): 
-    global done,Move_INTERVAL,last_moved_time,stop,block
+    global done,Move_INTERVAL,last_moved_time,stop,block,gOver
     done= False
 
     board = Board()
@@ -361,6 +369,11 @@ def runGame():
                     if stop == True:
                         import pause
                         pause.setDisplay()
+    while gOver:
+        gameover()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gOver = False
                         
 
 
