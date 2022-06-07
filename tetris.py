@@ -79,25 +79,26 @@ class BlockG(Block): #게임안에서의 블록
                 if cnt % self.block_size == 0:
                     row_cnt += 1
                     cnt = 0
-    def downBlock(sel,block):  ##블럭이 내려옴
-        block[1] += 10
-        block[0] += 50
     def turnBlock(self):
         if self.block_size == 3:    
             tmp = [] 
+            tmp.append(self.block_shape[6])
+            tmp.append(self.block_shape[3])
+            tmp.append(self.block_shape[0])
+            tmp.append(self.block_shape[7])
+            tmp.append(self.block_shape[4])
             tmp.append(self.block_shape[1])
-            tmp.append(self.block_shape[2]) 
+            tmp.append(self.block_shape[8]) 
             tmp.append(self.block_shape[5])
+            tmp.append(self.block_shape[2])
 
-            self.block_shape[1] = self.block_shape[3]
-            self.block_shape[2] = self.block_shape[6]
-            self.block_shape[5] = self.block_shape[7]
+            # self.block_shape[1] = self.block_shape[3]
+            # self.block_shape[2] = self.block_shape[6]
+            # self.block_shape[5] = self.block_shape[7]
             
-            self.block_shape[3] = tmp[0]
-            self.block_shape[6] = tmp[1]
-            self.block_shape[7] = tmp[2]
+            self.block_shape = tmp.copy()
         elif self.block_size == 2:
-            return
+            pass
 
 
 
@@ -346,7 +347,8 @@ def runGame():
                     board.delBlockToBoard(block[0])
                     block[0].turnBlock()
                     if board.insertBlockTOBoard(block[0]) == True:
-                        block[0].turnBlock()
+                        for i in range(3):
+                            block[0].turnBlock()
                         board.insertBlockTOBoard(block[0])
                     board.drawboard()
                     pygame.display.update() 
