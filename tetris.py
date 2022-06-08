@@ -280,7 +280,12 @@ def gameover():
     pygame.display.update()
     
 
-
+# def clearInfo():
+#     del board
+#     block = []
+#     if len(save) == 1:
+#         del save[0]
+    
     
 # 4. pygame 무한루프
 def runGame(): 
@@ -326,10 +331,6 @@ def runGame():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                del board
-                block = []
-                if len(save) == 1:
-                    del save[0]
                 done=True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
@@ -378,17 +379,16 @@ def runGame():
                 elif event.key == pygame.K_ESCAPE:
                     stop = True
                     if stop == True:
-                        import pause
-                        pause.setDisplay()
+                        import tetrisPause
+                        tetrisPause.displayWindow()
     while gOver:
         gameover()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gOver = False
+            elif event.type == pygame.key.get_pressed():
+                gOver = False
                         
-
-
-
 # setscreen()
 # runGame()
 # pygame.quit()
