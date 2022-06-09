@@ -50,12 +50,14 @@ def check_id():
         return
     tkinter.messagebox.showinfo("","사용 가능한 아이디입니다.")
     id_checkFlag = True
-    
+
+def precautions():
+    tkinter.messagebox.showinfo("주의사항","아이디 형식:영문 대소문자 및 숫자, 특수기호를 이용한 4~20자\n비밀번호 형식:영문 대소문자 및 숫자, 특수기호(!@#$%&*?)를 모두 포함한 8~20자")
 
 def joinWindowdis():
     global new_id, new_pwd , check_pwd , id_checkFlag,joinWindow
     joinWindow = t.Tk()
-    joinWindow.geometry("340x300")
+    joinWindow.geometry("340x300-500+140")
     joinWindow.resizable(width = False, height = False)
     new_id, new_pwd , check_pwd = t.StringVar(), t.StringVar(), t.StringVar() 
     id_checkFlag = False
@@ -70,7 +72,7 @@ def joinWindowdis():
     check_pwd.place(x = 105, y = 170)
     t.Button(joinWindow, text = "아이디 중복확인", command = check_id).place(x = 225, y = 120)
     t.Button(joinWindow, text = "회원가입",width = 15,height = 2, command = join).place(x = 100, y = 200)
-    t.Button(joinWindow, text = "회원가입 주의사항",width = 15, command = changePwd).place(x = 100, y = 250)
+    t.Button(joinWindow, text = "회원가입 주의사항",width = 15, command = precautions).place(x = 100, y = 250)
     joinWindow.mainloop()
 
 
@@ -117,6 +119,7 @@ def mainWindow():
 
 
     window.mainloop()
+    
 def getUserScore():
     for a in log.user:
         if a.id == now_user_id:
@@ -127,30 +130,37 @@ def userInfo():
     tkinter.messagebox.showinfo("개인정보 확인", f"1.id = {now_user_id}\n2.Password: {now_user_qwd}\n3.bestscore: {str(getUserScore())}")
 
 def changePwd():
+    global now_user_qwd
     for a in log.user:
         if a.id == now_user_id:
             if a.pwd == beforepassword.get():
-                a.changePwd(afterpassword.get())
-                tkinter.messagebox.showinfo("비밀번호 변경", "변경 성공")
-                log.saveData()
+                if log.chk_password(afterpassword.get()) == True:
+                    a.changePwd(afterpassword.get())
+                    now_user_qwd = afterpassword.get()
+                    tkinter.messagebox.showinfo("비밀번호 변경", "변경 성공")
+                    log.saveData()
+                    changePwdWindow.destroy()
+
+                else:
+                    tkinter.messagebox.showinfo("비밀번호 형식 재확인","비밀번호 형식:영문 대소문자 및 숫자, 특수기호(!@#$%&*?)를 모두 포함한 8~20자")
                 return            
     tkinter.messagebox.showerror("비밀번호 오류!", "기존 비밀번호를 확인해주세요")
     
 
-def changePwdWindow(): 
-    global beforepassword, afterpassword
-    settingwindow = t.Tk() 
-    settingwindow.geometry("500x500")
-    settingwindow.resizable(width = False, height = False)
+def disPalyChangePwdW(): 
+    global beforepassword, afterpassword,changePwdWindow
+    changePwdWindow = t.Tk() 
+    changePwdWindow.geometry("500x500")
+    changePwdWindow.resizable(width = False, height = False)
     beforepassword, afterpassword = t.StringVar(), t.StringVar() 
-    t.Label(settingwindow, text = "변경 전 비밀번호:").place(x = 100, y = 210)
-    t.Label(settingwindow, text = "변경 후 비밀번호:").place(x = 100, y = 240)
-    beforepassword = t.Entry(settingwindow)
+    t.Label(changePwdWindow, text = "변경 전 비밀번호:").place(x = 100, y = 210)
+    t.Label(changePwdWindow, text = "변경 후 비밀번호:").place(x = 100, y = 240)
+    beforepassword = t.Entry(changePwdWindow)
     beforepassword.place(x = 210, y = 210)
-    afterpassword = t.Entry(settingwindow)
+    afterpassword = t.Entry(changePwdWindow)
     afterpassword.place(x = 210, y = 240)
-    t.Button(settingwindow, text = "변경", command = changePwd).place(x = 370, y = 220)
-    settingwindow.mainloop()
+    t.Button(changePwdWindow, text = "변경", command = changePwd).place(x = 370, y = 220)
+    changePwdWindow.mainloop()
 
 
 def slectWindow():
@@ -159,7 +169,7 @@ def slectWindow():
     setWindow.resizable(width = False, height = False) 
     t.Button(setWindow, text = "게임 시작", width = 15, height = 2, command = startGame).place(x = 200, y = 75)
     t.Button(setWindow, text = "회원 정보", width = 15, height = 2, command=userInfo).place(x = 200, y = 225)
-    t.Button(setWindow, text = "비밀번호 변경", width = 15, height = 2, command = changePwdWindow).place(x = 200, y = 375)
+    t.Button(setWindow, text = "비밀번호 변경", width = 15, height = 2, command = disPalyChangePwdW).place(x= 200,y = 375)
     
 
 mainWindow()

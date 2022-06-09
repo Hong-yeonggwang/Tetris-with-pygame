@@ -7,15 +7,14 @@ from datetime import timedelta
 
 class Block: #블록의 필수 정보. 블럭을 랜덤으로 생성한다.
     block = [] ## 0번지 블럭 모양 1번지 색깔
-    btype= [[0,1,0,1,1,0,1,0,0],[1,1,1,0,0,1,0,0,0],[1,1,1,1,0,0,0,0,0],
-    [0,1,0,1,1,1,0,0,0],[0,0,0,1,1,1,0,1,0],[1,1,1,1],[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0]]
+    btype= [[0,1,1,1,1,0,0,0,0],[1,1,0,0,1,1,0,0,0],[1,0,0,1,1,1,0,0,0,0],
+    [0,0,1,1,1,1,0,0,0],[0,1,0,1,1,1,0,0,0],[1,1,1,1],[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0]]
     # block_num = 0
     def makeBlock(self):  ##랜덤으로 블록을 만듦
         shape = random.randint(0,6)      
         color = random.randint(0,5)
         block = []
         block.extend([shape,color])
-        # block.append([color])
         return block
     
 class BlockG(Block): #게임안에서의 블록 
@@ -33,37 +32,37 @@ class BlockG(Block): #게임안에서의 블록
             self.block_size = 3
             self.block_shape = self.btype[0]
             self.block_position = [5,1]
-            self.block_color = block[0]
+            self.block_color = block[1]
         elif block[0] == 1:
             self.block_size = 3
             self.block_shape = self.btype[1]
             self.block_position = [5,1]
-            self.block_color = block[0]
+            self.block_color = block[1]
         elif block[0] == 2:
             self.block_size = 3
             self.block_shape = self.btype[2]
             self.block_position = [5,1]
-            self.block_color = block[0]
+            self.block_color = block[1]
         elif block[0] == 3:
             self.block_size = 3
             self.block_shape = self.btype[3]
             self.block_position = [5,1]
-            self.block_color = block[0]
+            self.block_color = block[1]
         elif block[0] == 4:
             self.block_size = 3
             self.block_shape = self.btype[4]
             self.block_position = [5,1]
-            self.block_color = block[0]
+            self.block_color = block[1]
         elif block[0] == 5:
             self.block_size = 2
             self.block_shape = self.btype[5]
             self.block_position = [5,1]
-            self.block_color = block[0]
+            self.block_color = block[1]
         else : 
             self.block_size = 4
             self.block_shape = self.btype[6]
             self.block_position = [5,1]
-            self.block_color = block[0]
+            self.block_color = block[1]
     def drawBlock(self,position): ## 실질적으로 화면에 블럭을 그려넣는 메소드.
         cnt = 0
         row_cnt = 0
@@ -172,23 +171,6 @@ class Board:
                 if col_cnt % block.block_size == 0:
                     row_cnt += 1
                     col_cnt = 0
-   
-
-# pygame.init() # 2. pygame 초기화
-
-# 3. pygame에 사용되는 전역변수 선언
-# color = [[255,0,0],[255,50,0],[255,255,0],[0,0,255],[0,255,0],[100,0,255],[255,192,203]] #빨주노초파남보 컬러코드
-# size = [500,500]
-# # screen = pygame.display.set_mode(size)
-# # done= False
-# clock= pygame.time.Clock()
-# Move_INTERVAL = timedelta(seconds=0.5)
-# last_moved_time = datetime.now()
-# block = []
-# save = []
-# score = 0
-# stop = False
-# gOver = True
 
 def blockCreat():
     block.append(BlockG())
@@ -264,6 +246,7 @@ def pullBlock(board,save):
         block[0].block_position = [5,1]
         block.insert(0,save[0])
         del save[0]
+
 def drawbackground():
     screen.fill((255,255,255))
     pygame.draw.rect(screen,(0,0,0),(20,100,90,90),4)
@@ -274,25 +257,19 @@ def drawbackground():
     screen.blit(text,(10,10))
 
 def gameover():
-    font = pygame.font.SysFont("arial",70,True,True)
-    text = font.render("GAME OVER",True,(10,10,10))
-    screen.blit(text,(60,200))
+    gameover_font = pygame.font.SysFont("arial",70,True,True)
+    conti_font = pygame.font.SysFont("arial",35,True,True)
+    gameover = gameover_font.render("GAME OVER",True,(10,10,10),(255,255,255))
+    conti = conti_font.render("press Any key",True,(10,10,10),(255,255,255))    
+    screen.blit(gameover,(60,200))
+    screen.blit(conti,(120,300))
     pygame.display.update()
     
-
-# def clearInfo():
-#     del board
-#     block = []
-#     if len(save) == 1:
-#         del save[0]
-    
-    
-# 4. pygame 무한루프
 def runGame(): 
     global done,Move_INTERVAL,last_moved_time,stop,block,gOver,color,size,score
     done= False
-    color = [[255,0,0],[255,50,0],[255,255,0],[0,0,255],[0,255,0],[100,0,255],[255,192,203]] #빨주노초파남보 컬러코드
-    
+    color = [[255,0,0],[0,0,255],[0,255,0],[255,255,0],[255,51,153],[227,53,255]] 
+
     clock= pygame.time.Clock()
     Move_INTERVAL = timedelta(seconds=0.5)
     last_moved_time = datetime.now()
@@ -386,8 +363,9 @@ def runGame():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gOver = False
-            elif event.type == pygame.key.get_pressed():
+            elif event.type == pygame.KEYDOWN:
                 gOver = False
+
                         
 # setscreen()
 # runGame()
