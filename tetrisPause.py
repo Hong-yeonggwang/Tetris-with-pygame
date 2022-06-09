@@ -19,6 +19,5 @@ def displayWindow():
 
     window.mainloop()
 
-displayWindow()
 
 
