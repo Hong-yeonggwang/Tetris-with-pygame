@@ -1,7 +1,6 @@
 import tkinter as t
 import tkinter.messagebox
 import sys
-from tkinter.tix import Tree
 import login_sys as log
 import tetris
 
@@ -57,7 +56,7 @@ def precautions():
 def joinWindowdis():
     global new_id, new_pwd , check_pwd , id_checkFlag,joinWindow
     joinWindow = t.Tk()
-    joinWindow.geometry("340x300-500+140")
+    joinWindow.geometry("340x300+210+140") #+640+440
     joinWindow.resizable(width = False, height = False)
     new_id, new_pwd , check_pwd = t.StringVar(), t.StringVar(), t.StringVar() 
     id_checkFlag = False
@@ -100,7 +99,7 @@ def mainWindow():
     global user_id,user_pwd,login_cnt,window
     login_cnt = 0
     window = t.Tk()
-    window.geometry("500x530")
+    window.geometry("500x530+550+140")
     window.resizable(width = False, height = False) 
     user_id, user_pwd = t.StringVar(), t.StringVar()
     t.Label(window, text = "Username:").place(x = 110, y = 290)
