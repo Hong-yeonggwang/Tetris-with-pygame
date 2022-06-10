@@ -79,8 +79,8 @@ class BlockG(Block): #게임안에서의 블록
                     row_cnt += 1
                     cnt = 0
     def turnBlock(self):
+        tmp = [] 
         if self.block_size == 3:    
-            tmp = [] 
             tmp.append(self.block_shape[6])
             tmp.append(self.block_shape[3])
             tmp.append(self.block_shape[0])
@@ -90,12 +90,18 @@ class BlockG(Block): #게임안에서의 블록
             tmp.append(self.block_shape[8]) 
             tmp.append(self.block_shape[5])
             tmp.append(self.block_shape[2])
-
-            # self.block_shape[1] = self.block_shape[3]
-            # self.block_shape[2] = self.block_shape[6]
-            # self.block_shape[5] = self.block_shape[7]
-            
             self.block_shape = tmp.copy()
+        elif self.block_size == 4:
+            tmp.append(self.block_shape[1])
+            tmp.append(self.block_shape[2])
+            tmp.append(self.block_shape[3])
+
+            self.block_shape[1] = self.block_shape[4]
+            self.block_shape[2] = self.block_shape[8]
+            self.block_shape[3] = self.block_shape[12]
+            self.block_shape[4] = tmp[0]
+            self.block_shape[8] = tmp[1]
+            self.block_shape[12] = tmp[2]
         elif self.block_size == 2:
             pass
 
