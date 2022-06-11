@@ -47,7 +47,7 @@ def check_id():
     else:
         tkinter.messagebox.showerror("잘못된 형식","아이디 형식이 잘못됐습니다. 주의 사항을 확인해주세요.")
         return
-    tkinter.messagebox.showinfo("","사용 가능한 아이디입니다.")
+    tkinter.messagebox.showinfo("",f"'{new_id.get()}' 사용 가능한 아이디입니다.")
     id_checkFlag = True
 
 def precautions():
@@ -113,7 +113,7 @@ def mainWindow():
     t.Button(window, text = "테트리스 규칙", width = 15, height = 2, command = rule).place(x = 200, y = 410)
     t.Button(window, text = "나가기", width = 15, height = 2, command=sys.exit).place(x = 200, y = 455)
 
-    image = t.PhotoImage(file = "C:/python/Tetris-with-pygame/테트리스.png", master = window)
+    image = t.PhotoImage(file = "테트리스.png", master = window)
     t.Label(image = image).place(x = 70 , y = 0)
 
 
