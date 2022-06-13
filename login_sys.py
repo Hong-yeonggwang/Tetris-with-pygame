@@ -47,5 +47,3 @@ def saveData():
 def make_id(userInputId,userInPutPwd):
 # 비밀번호 생성
     user.append(User(userInputId,userInPutPwd))
-class QMessageBox:
-    pass
